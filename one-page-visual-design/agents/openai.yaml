@@ -1,0 +1,7 @@
+interface:
+  display_name: "One-Page Visual Design"
+  short_description: "Model one system on a print-ready one-page visual"
+  default_prompt: "Use $one-page-visual-design to turn this process or system into an editable one-page visual, print-ready at A3, with a render and critique loop."
+
+policy:
+  allow_implicit_invocation: true

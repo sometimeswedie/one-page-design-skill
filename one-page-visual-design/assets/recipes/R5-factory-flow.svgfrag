@@ -1,0 +1,23 @@
+<!-- recipe R5-factory-flow: factory flow: floor zones + cycle-time bars. Inner markup for the template's stage <svg viewBox="0 0 392 215"> (A3 mm). Sample words are placeholders. See references/layout-recipes.md -->
+<rect x="0" y="0" width="392" height="56" rx="3" fill="none" stroke="var(--line)" stroke-width=".5" stroke-dasharray="1.6 1.2"/><text class="t3" x="4" y="7" style="font-weight:700">MACHINE HALL</text>
+<rect x="0" y="62" width="392" height="56" rx="3" fill="none" stroke="var(--line)" stroke-width=".5" stroke-dasharray="1.6 1.2"/><text class="t3" x="4" y="69" style="font-weight:700">ASSEMBLY HALL (U-shaped flow: the line ends next to where it starts)</text>
+<g class="node c3" data-node id="s1" transform="translate(20 15)"><rect width="100" height="28" rx="2.4"/><text class="t2" x="50" y="13.2" text-anchor="middle">1  Receive</text><text class="t3" x="50" y="17.6" text-anchor="middle">incoming QC</text></g>
+<g class="node c2" data-node id="s2" transform="translate(146 15)"><rect style="stroke:var(--accent);stroke-width:1.2px" width="100" height="28" rx="2.4"/><text class="t2" x="50" y="13.2" text-anchor="middle">2  CNC cell</text><text class="t3" x="50" y="17.6" text-anchor="middle">3 machines</text></g>
+<g class="node c2" data-node id="s3" transform="translate(272 15)"><rect width="100" height="28" rx="2.4"/><text class="t2" x="50" y="13.2" text-anchor="middle">3  Finish</text><text class="t3" x="50" y="17.6" text-anchor="middle">deburr + coat</text></g>
+<g class="node c2" data-node id="s4" transform="translate(272 77)"><rect width="100" height="28" rx="2.4"/><text class="t2" x="50" y="13.2" text-anchor="middle">4  Assemble</text><text class="t3" x="50" y="17.6" text-anchor="middle">line of 4</text></g>
+<g class="node c4" data-node id="s5" transform="translate(146 77)"><rect width="100" height="28" rx="2.4"/><text class="t2" x="50" y="13.2" text-anchor="middle">5  Test</text><text class="t3" x="50" y="17.6" text-anchor="middle">bench + flight</text></g>
+<g class="node c1" data-node id="s6" transform="translate(20 77)"><rect width="100" height="28" rx="2.4"/><text class="t2" x="50" y="14" text-anchor="middle">6  Pack & ship</text></g>
+<path class="edge" data-edge d="M120 29 H146"/>
+<path class="edge" data-edge d="M246 29 H272"/>
+<path class="edge" data-edge d="M322 43 V77"/>
+<path class="edge" data-edge d="M272 91 H246"/>
+<path class="edge" data-edge d="M146 91 H120"/>
+<text class="t3" x="196" y="12" text-anchor="middle" style="font-weight:700;fill:var(--accent)">bottleneck</text>
+<text class="t3" x="0" y="131" style="font-weight:700">CYCLE TIME PER STATION (minutes; dashed line = takt 30)</text>
+<g class="node c3" transform="translate(6 188.4)"><rect width="56" height="15.6" rx="1.5"/></g><text class="t2" x="34" y="185.9" text-anchor="middle">12 min</text><text class="t3" x="34" y="211" text-anchor="middle">1 Receive</text>
+<g class="node c2" transform="translate(72 149.4)"><rect style="stroke:var(--accent);stroke-width:1.2px" width="56" height="54.6" rx="1.5"/></g><text class="t2" x="100" y="146.9" text-anchor="middle">42 min</text><text class="t3" x="100" y="211" text-anchor="middle">2 CNC cell</text>
+<g class="node c2" transform="translate(138 172.8)"><rect width="56" height="31.2" rx="1.5"/></g><text class="t2" x="166" y="170.3" text-anchor="middle">24 min</text><text class="t3" x="166" y="211" text-anchor="middle">3 Finish</text>
+<g class="node c2" transform="translate(204 165)"><rect width="56" height="39" rx="1.5"/></g><text class="t2" x="232" y="162.5" text-anchor="middle">30 min</text><text class="t3" x="232" y="211" text-anchor="middle">4 Assemble</text>
+<g class="node c4" transform="translate(270 178)"><rect width="56" height="26" rx="1.5"/></g><text class="t2" x="298" y="175.5" text-anchor="middle">20 min</text><text class="t3" x="298" y="211" text-anchor="middle">5 Test</text>
+<g class="node c1" transform="translate(336 191)"><rect width="56" height="13" rx="1.5"/></g><text class="t2" x="364" y="188.5" text-anchor="middle">10 min</text><text class="t3" x="364" y="211" text-anchor="middle">6 Pack & ship</text>
+<line x1="0" x2="392" y1="165" y2="165" stroke="var(--accent)" stroke-width=".5" stroke-dasharray="3 1.6"/><text class="t3 halo" x="390" y="163" text-anchor="end" style="fill:var(--accent)">takt 30 min</text>

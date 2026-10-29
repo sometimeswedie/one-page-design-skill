@@ -1,0 +1,29 @@
+<!-- recipe R1-swimlane: swimlane process flow. Inner markup for the template's stage <svg viewBox="0 0 392 215"> (A3 mm). Sample words are placeholders. See references/layout-recipes.md -->
+<text class="t3" x="60" y="8" text-anchor="middle" style="font-weight:700">DEFINE</text>
+<text class="t3" x="119" y="8" text-anchor="middle" style="font-weight:700">PROCURE</text>
+<text class="t3" x="178" y="8" text-anchor="middle" style="font-weight:700">MAKE</text>
+<text class="t3" x="237" y="8" text-anchor="middle" style="font-weight:700">ASSEMBLE</text>
+<text class="t3" x="296" y="8" text-anchor="middle" style="font-weight:700">VERIFY</text>
+<text class="t3" x="355" y="8" text-anchor="middle" style="font-weight:700">RELEASE</text>
+<rect x="0" y="16" width="392" height="44" rx="2" fill="var(--panel)"/>
+<text class="t3" x="3" y="22" style="font-weight:700">ENGINEERING</text>
+<rect x="0" y="62" width="392" height="44" rx="2" fill="var(--panel)"/>
+<text class="t3" x="3" y="68" style="font-weight:700">SOURCING</text>
+<rect x="0" y="108" width="392" height="44" rx="2" fill="var(--panel)"/>
+<text class="t3" x="3" y="114" style="font-weight:700">FACTORY</text>
+<rect x="0" y="154" width="392" height="44" rx="2" fill="var(--panel)"/>
+<text class="t3" x="3" y="160" style="font-weight:700">QUALITY</text>
+<g class="node c1" data-node transform="translate(38 31)"><rect width="44" height="18" rx="2.4"/><text class="t2" x="22" y="8.2" text-anchor="middle">Freeze design</text><text class="t3" x="22" y="12.6" text-anchor="middle">drawings + BOM</text></g>
+<g class="node c3" data-node transform="translate(97 77)"><rect width="44" height="18" rx="2.4"/><text class="t2" x="22" y="8.2" text-anchor="middle">Order parts</text><text class="t3" x="22" y="12.6" text-anchor="middle">long-lead first</text></g>
+<g class="node c2" data-node transform="translate(156 123)"><rect width="44" height="18" rx="2.4"/><text class="t2" x="22" y="8.2" text-anchor="middle">Machine</text><text class="t3" x="22" y="12.6" text-anchor="middle">CNC cell</text></g>
+<g class="node c2" data-node transform="translate(215 123)"><rect width="44" height="18" rx="2.4"/><text class="t2" x="22" y="8.2" text-anchor="middle">Assemble</text><text class="t3" x="22" y="12.6" text-anchor="middle">airframe + avionics</text></g>
+<g class="node c4" data-node transform="translate(274 169)"><rect width="44" height="18" rx="2.4"/><text class="t2" x="22" y="8.2" text-anchor="middle">Test & inspect</text><text class="t3" x="22" y="12.6" text-anchor="middle">vs. spec</text></g>
+<g class="node c1" data-node transform="translate(333 31)"><rect width="44" height="18" rx="2.4"/><text class="t2" x="22" y="8.2" text-anchor="middle">Release</text><text class="t3" x="22" y="12.6" text-anchor="middle">ship + support</text></g>
+<path class="edge" data-edge d="M82 40 H86.5 Q89.5 40 89.5 43 V83 Q89.5 86 92.5 86 H97"/>
+<path class="edge" data-edge d="M141 86 H145.5 Q148.5 86 148.5 89 V129 Q148.5 132 151.5 132 H156"/>
+<path class="edge" data-edge d="M200 132 H215"/>
+<path class="edge" data-edge d="M259 132 H263.5 Q266.5 132 266.5 135 V175 Q266.5 178 269.5 178 H274"/>
+<path class="edge" data-edge d="M318 178 H322.5 Q325.5 178 325.5 175 V43 Q325.5 40 328.5 40 H333"/>
+<path class="edge loop" data-edge d="M296 187 V192 H178 V141"/>
+<text class="t3 halo" data-edge-label x="237" y="190.6" text-anchor="middle">rework if out of tolerance</text>
+<g class="legend" transform="translate(0 207)"><text class="t3" x="0" y="0" style="font-weight:700">LEGEND</text><text class="t3" x="20" y="0">lane = owner, colour = work type, dashed accent line = rework loop, read left to right</text></g>

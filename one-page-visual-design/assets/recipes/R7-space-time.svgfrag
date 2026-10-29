@@ -1,0 +1,17 @@
+<!-- recipe R7-space-time: space-time band with gates. Inner markup for the template's stage <svg viewBox="0 0 392 215"> (A3 mm). Sample words are placeholders. See references/layout-recipes.md -->
+<polygon points="20.0,86.0 80.0,84.0 140.0,79.0 200.0,71.0 260.0,62.0 320.0,54.0 380.0,46.0 380.0,126.0 320.0,118.0 260.0,110.0 200.0,101.0 140.0,93.0 80.0,88.0 20.0,86.0" fill="var(--c2)" fill-opacity=".28" stroke="var(--c2)" stroke-width=".5"/>
+<text class="t3" x="20" y="10" style="font-weight:700">MONTHLY CAPACITY (band thickness = units per month)</text>
+<text class="t3" x="79" y="81.5" text-anchor="end">4</text>
+<text class="t3" x="139" y="76.5" text-anchor="end">14</text>
+<text class="t3" x="199" y="68.5" text-anchor="end">30</text>
+<text class="t3" x="259" y="59.5" text-anchor="end">48</text>
+<text class="t3" x="319" y="51.5" text-anchor="end">64</text>
+<text class="t3" x="379" y="43.5" text-anchor="end">80</text>
+<line class="rule" x1="80" x2="80" y1="20" y2="190" stroke-dasharray="1.2 1.2"/><g class="node c1" data-node transform="translate(71 166)"><rect width="18" height="9" rx="1.5"/><text class="t2" x="9" y="6.3" text-anchor="middle">G1</text></g><text class="t3" x="80" y="182" text-anchor="middle">pilot cell proven</text>
+<line class="rule" x1="200" x2="200" y1="20" y2="190" stroke-dasharray="1.2 1.2"/><g class="node c1" data-node transform="translate(191 166)"><rect width="18" height="9" rx="1.5"/><text class="t2" x="9" y="6.3" text-anchor="middle">G2</text></g><text class="t3" x="200" y="182" text-anchor="middle">line qualified</text>
+<line class="rule" x1="320" x2="320" y1="20" y2="190" stroke-dasharray="1.2 1.2"/><g class="node c1" data-node transform="translate(311 166)"><rect width="18" height="9" rx="1.5"/><text class="t2" x="9" y="6.3" text-anchor="middle">G3</text></g><text class="t3" x="320" y="182" text-anchor="middle">rate production</text>
+<text class="t3" x="20" y="204" text-anchor="middle">month 0</text>
+<text class="t3" x="140" y="204" text-anchor="middle">month 12</text>
+<text class="t3" x="260" y="204" text-anchor="middle">month 24</text>
+<text class="t3" x="380" y="204" text-anchor="middle">month 36</text>
+<line class="rule" x1="20" x2="380" y1="195" y2="195"/>

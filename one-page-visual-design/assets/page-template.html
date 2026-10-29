@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>[Specific page title] - one-page design</title>
+<!-- PAGE SIZE: change ALL FOUR together: this meta, data-size on <main>, --page-w/--page-h/--s/--k, and @page size.
+     Landscape (w x h mm): A4 297x210 s=.707 k=1.25 | A3 420x297 s=1 k=1 | A2 594x420 s=1.414 k=1 | A1 841x594 s=2 k=1.
+     Portrait: swap w and h and add P (A3P), new_page.py also sets the SVG viewBox to 269 x 338.
+     Design everything in "A3 millimetres": SVG user unit = 1 mm at A3, so SVG scales with the paper; HTML sizes use var(--s).
+     --k boosts TYPE ONLY on small paper (A4) so labels stay >= 7pt. --title-pt is the title size at A3 (shrink it for long titles or narrow sheets;
+     the title must stay on at most 2 lines inside the 28 mm masthead). Never use vh/vw. -->
+<meta name="opd:size" content="A3L">
+
+<!-- BRAND: link the project's tokens, then add the bridge block at the end of <style>. See references/brand-and-tokens.md
+     (scripts/new_page.py --brand-css PATH does the link). -->
+<!-- <link rel="stylesheet" href="../brand/tokens.css"> -->
+<style>
+@page { size: 420mm 297mm; margin: 0 }
+:root {
+  --page-w: 420mm; --page-h: 297mm; --s: 1; --k: 1; --ts: calc(var(--s) * var(--k)); --title-pt: 30pt;
+
+  /* brand bridge: map the project's tokens onto these names, e.g. --paper: var(--rb-bg, #fbfaf7). Neutral fallbacks otherwise. */
+  --paper: #fbfaf7;  --panel: #f1efe9;  --ink: #15171a;  --ink-2: #3d434a;  --ink-3: #5b626b;  --line: #c9c5bb;
+  --accent: #0b5cad; --on-accent: #ffffff;
+  --font-display: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-body: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-mono: Menlo, "SF Mono", Consolas, monospace;
+
+  /* categorical colours: colour-blind-safe (Okabe-Ito based). Use for CATEGORY/OWNER only; always pair with a label or shape. */
+  --c1: #0072b2; --c2: #d55e00; --c3: #007a5a; --c4: #8a4f9e; --c5: #a67a00; --c6: #3f6f8f;
+  --tint: 14%;           /* node fill = category colour mixed into paper */
+  color-scheme: light;
+}
+:root[data-theme="dark"] {
+  --paper: #12161a; --panel: #1b2127; --ink: #eef0f2; --ink-2: #c3c8ce; --ink-3: #9aa2ab; --line: #3a434c;
+  --accent: #6db3ff; --on-accent: #08121c;
+  --c1: #56b4e9; --c2: #ff9e5e; --c3: #3ccf9f; --c4: #d69cf0; --c5: #e8c25a; --c6: #8fb7d4;
+  --tint: 22%;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; background: var(--paper); -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+body { font: 400 calc(var(--ts) * 9pt)/1.3 var(--font-body); color: var(--ink); }
+
+/* Fixed masthead and footer rows make the stage a known size: A3 landscape stage = 392 x 215 mm (A3 portrait 269 x 338), so the SVG
+   viewBox below matches it exactly and renders at scale 1. If you change these rows, change the viewBox (the lint reports `svg-scale`). */
+.canvas { position: relative; width: var(--page-w); height: var(--page-h); overflow: hidden; background: var(--paper);
+  display: grid; grid-template-rows: calc(var(--s) * 28mm) 1fr calc(var(--s) * 16mm); gap: calc(var(--s) * 5mm); padding: calc(var(--s) * 14mm); }
+
+/* masthead: title answers "why does this page exist"; metadata makes a printed copy datable */
+.masthead { display: flex; gap: calc(var(--s) * 8mm); align-items: flex-end; padding-bottom: calc(var(--s) * 4mm); border-bottom: 1px solid var(--line); }
+.logo { height: calc(var(--s) * 12mm); display: block; flex: none; }
+.titleblock { flex: 1; min-width: 0; }
+h1 { margin: 0; font: 700 calc(var(--ts) * var(--title-pt))/1.05 var(--font-display); letter-spacing: -0.01em; }
+.purpose { margin: calc(var(--s) * 2mm) 0 0; font: 400 calc(var(--ts) * 12pt)/1.3 var(--font-body); color: var(--ink-2); max-width: calc(var(--s) * 230mm); }
+.meta { margin: 0 0 0 auto; flex: none; display: grid; grid-template-columns: repeat(3, auto); gap: calc(var(--s) * 6mm); font: 400 calc(var(--ts) * 8pt)/1.2 var(--font-mono); color: var(--ink-3); }
+.meta dt { text-transform: uppercase; letter-spacing: .08em; } .meta dd { margin: 0; color: var(--ink); font-weight: 600; }
+
+.stage { min-height: 0; } .stage > svg { width: 100%; height: 100%; display: block; }
+
+.foot { display: grid; grid-template-columns: 1fr auto; gap: calc(var(--s) * 8mm); padding-top: calc(var(--s) * 3mm); border-top: 1px solid var(--line); font: 400 calc(var(--ts) * 8pt)/1.35 var(--font-body); color: var(--ink-3); }
+.foot b { color: var(--ink-2); }
+
+/* ---- SVG vocabulary (units = A3 mm) ---- */
+svg text { font-family: var(--font-body); fill: var(--ink); }
+.t1 { font: 700 calc(6.4px * var(--k)) var(--font-display); }                 /* tier 1: stage / section heads  (~18pt at A3) */
+.t2 { font: 600 calc(3.9px * var(--k)) var(--font-body); }                    /* tier 2: node labels             (~11pt) */
+.t3 { font: 400 calc(3.0px * var(--k)) var(--font-body); fill: var(--ink-2); }/* tier 3: annotations, units, sources (~8.5pt; do not go smaller) */
+.num { font: 700 calc(12px * var(--k)) var(--font-display); }                 /* big figures that carry the story */
+.halo { paint-order: stroke; stroke: var(--paper); stroke-width: 1.4px; stroke-linejoin: round; }
+
+.node rect, .node path, .node circle, .node polygon { stroke-width: .5px; fill: color-mix(in srgb, var(--cat, var(--c1)) var(--tint), var(--paper)); stroke: var(--cat, var(--c1)); }
+.c1 { --cat: var(--c1); } .c2 { --cat: var(--c2); } .c3 { --cat: var(--c3); } .c4 { --cat: var(--c4); } .c5 { --cat: var(--c5); } .c6 { --cat: var(--c6); }
+/* evidence status = outline style: solid decided/specified/observed, dashed proposed/assumed, dotted open */
+.ev-proposed rect, .ev-proposed path { stroke-dasharray: 2.4 1.4; }
+.ev-open rect, .ev-open path { stroke-dasharray: .6 1.2; fill: none; }
+
+.edge { fill: none; stroke: var(--ink-2); stroke-width: .55px; stroke-linejoin: round; stroke-linecap: round; marker-end: url(#arrow); }
+.edge.loop { stroke: var(--accent); stroke-dasharray: 3 1.6; }
+.rule { stroke: var(--line); stroke-width: .3px; }
+
+@media print { .canvas { box-shadow: none; } }
+</style>
+<script>
+/* theme: ?theme=light|dark wins, else the OS setting. render.py sets both. Never leave the theme implicit in a render. */
+(function () {
+  var q = new URLSearchParams(location.search).get('theme');
+  document.documentElement.setAttribute('data-theme', q || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'));
+})();
+</script>
+</head>
+<body>
+<main class="canvas" data-canvas data-size="A3L">
+
+  <header class="masthead">
+    <!-- <img class="logo" src="../brand/logo.svg" alt="Brand"> -->
+    <div class="titleblock">
+      <h1 data-title>[Specific title: what this page explains]</h1>
+      <p class="purpose">This page helps [audience] see [thing] by showing [relationships].</p>
+    </div>
+    <dl class="meta" data-meta>
+      <div><dt>Status</dt><dd>exploration</dd></div>
+      <div><dt>Version</dt><dd>v0.1</dd></div>
+      <div><dt>Date</dt><dd>2026-01-01</dd></div>
+    </dl>
+  </header>
+
+  <section class="stage">
+    <!-- viewBox = the stage in A3 mm: 392 x 215 at landscape, 269 x 338 at portrait (new_page.py sets it). Everything inside scales with the paper. -->
+    <svg viewBox="0 0 392 215" preserveAspectRatio="xMidYMid meet" role="img" aria-label="[one-sentence description of what the diagram shows]">
+      <defs>
+        <marker id="arrow" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="4.2" markerHeight="4.2" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="context-stroke"/></marker>
+      </defs>
+
+      <!-- Conventions the lint relies on: node = <g class="node" data-node> with ONE shape first, then text; edge = [data-edge]; label on a line = text.halo[data-edge-label].
+           Replace this sample with the real model. Delete anything that encodes nothing. -->
+      <g class="node c1" data-node transform="translate(0 60)"><rect width="68" height="30" rx="3"/><text class="t2" x="34" y="13" text-anchor="middle">Stage A</text><text class="t3" x="34" y="21" text-anchor="middle">what happens here</text></g>
+      <g class="node c1" data-node transform="translate(100 60)"><rect width="68" height="30" rx="3"/><text class="t2" x="34" y="13" text-anchor="middle">Stage B</text><text class="t3" x="34" y="21" text-anchor="middle">what happens here</text></g>
+      <g class="node c2 ev-proposed" data-node transform="translate(200 60)"><rect width="68" height="30" rx="3"/><text class="t2" x="34" y="13" text-anchor="middle">Stage C</text><text class="t3" x="34" y="21" text-anchor="middle">dashed = proposed</text></g>
+
+      <path class="edge" data-edge d="M68 75 H100"/>
+      <path class="edge" data-edge d="M168 75 H200"/>
+      <text class="t3 halo" data-edge-label x="84" y="72.5" text-anchor="middle">verb</text>
+      <path class="edge loop" data-edge d="M234 90 V112 Q234 118 228 118 H40 Q34 118 34 112 V90"/>
+      <text class="t3 halo" data-edge-label x="134" y="115.5" text-anchor="middle">what comes back and why it matters</text>
+
+      <!-- legend sits WITH the diagram, using the same classes as the nodes it explains -->
+      <g class="legend" transform="translate(0 200)">
+        <text class="t3" x="0" y="0" style="font-weight:700">LEGEND</text>
+        <g class="node c1" transform="translate(0 4)"><rect width="9" height="5" rx="1"/></g><text class="t3" x="12" y="8">category = owner / type</text>
+        <g class="node c2 ev-proposed" transform="translate(70 4)"><rect width="9" height="5" rx="1"/></g><text class="t3" x="82" y="8">dashed outline = proposed / assumed</text>
+        <path class="edge loop" data-edge-free d="M168 6.5 H182"/><text class="t3" x="185" y="8">feedback / rework</text>
+      </g>
+    </svg>
+  </section>
+
+  <footer class="foot">
+    <div><b>Evidence:</b> [source or decision behind each claim; mark proposed/assumed things on the diagram itself]. <b>Open:</b> [unresolved question, placed near the element it affects].</div>
+    <div>[owner, only if collaboration needs it]</div>
+  </footer>
+
+</main>
+</body>
+</html>

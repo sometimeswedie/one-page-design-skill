@@ -1,0 +1,157 @@
+{
+  "axis": {
+    "start": 0,
+    "end": 70,
+    "step": 10,
+    "label": "days from order"
+  },
+  "lanes": [
+    {
+      "id": "eng",
+      "label": "Engineering"
+    },
+    {
+      "id": "src",
+      "label": "Sourcing"
+    },
+    {
+      "id": "fac",
+      "label": "Factory"
+    },
+    {
+      "id": "qa",
+      "label": "Quality"
+    },
+    {
+      "id": "log",
+      "label": "Logistics"
+    }
+  ],
+  "tasks": [
+    {
+      "id": "t1",
+      "lane": "eng",
+      "start": 0,
+      "end": 8,
+      "label": "Freeze design",
+      "sub": "drawings + BOM",
+      "cls": "c1"
+    },
+    {
+      "id": "t2",
+      "lane": "src",
+      "start": 8,
+      "end": 38,
+      "label": "Long-lead parts",
+      "sub": "motors, flight computer",
+      "cls": "c3",
+      "critical": true,
+      "row": 0
+    },
+    {
+      "id": "t3",
+      "lane": "src",
+      "start": 8,
+      "end": 20,
+      "label": "Raw stock",
+      "cls": "c3",
+      "row": 1
+    },
+    {
+      "id": "t4",
+      "lane": "fac",
+      "start": 20,
+      "end": 34,
+      "label": "Machine",
+      "sub": "CNC cell",
+      "cls": "c2"
+    },
+    {
+      "id": "t5",
+      "lane": "fac",
+      "start": 38,
+      "end": 50,
+      "label": "Assemble",
+      "sub": "airframe + avionics",
+      "cls": "c2",
+      "critical": true
+    },
+    {
+      "id": "t6",
+      "lane": "qa",
+      "start": 34,
+      "end": 38,
+      "label": "Inspect parts",
+      "cls": "c4"
+    },
+    {
+      "id": "t7",
+      "lane": "qa",
+      "start": 50,
+      "end": 58,
+      "label": "Test flight",
+      "sub": "to spec",
+      "cls": "c4",
+      "critical": true
+    },
+    {
+      "id": "t8",
+      "lane": "log",
+      "start": 58,
+      "end": 66,
+      "label": "Pack and ship",
+      "sub": "door to door",
+      "cls": "c1",
+      "status": "proposed"
+    }
+  ],
+  "links": [
+    {
+      "from": "t1",
+      "to": "t2"
+    },
+    {
+      "from": "t1",
+      "to": "t3"
+    },
+    {
+      "from": "t3",
+      "to": "t4"
+    },
+    {
+      "from": "t4",
+      "to": "t6"
+    },
+    {
+      "from": "t2",
+      "to": "t5",
+      "xm": 38.5
+    },
+    {
+      "from": "t5",
+      "to": "t7"
+    },
+    {
+      "from": "t7",
+      "to": "t8"
+    }
+  ],
+  "milestones": [
+    {
+      "at": 8,
+      "label": "G1",
+      "text": "design frozen"
+    },
+    {
+      "at": 38,
+      "label": "G2",
+      "text": "all parts in"
+    },
+    {
+      "at": 58,
+      "label": "G3",
+      "text": "flight passed"
+    }
+  ],
+  "legend": "lane = owner, bar length = duration to scale, accent outline = critical path (longest chain), dashed = proposed"
+}

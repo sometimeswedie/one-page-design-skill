@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Lint fixture (deliberately broken)</title>
+<!-- Smoke test for scripts/render.py + scripts/lint_page.js. Run: python3 scripts/render.py assets/lint-fixture.html --no-png --strict   (must exit 1)
+     Expected errors:   font-too-small, low-contrast, svg-text-overflow, text-spills-box (x2), clipped-content, text-overlap, img-broken
+     Expected warnings: font-missing, prose-block, edge-floating-end, edge-crosses-text, edge-crosses-node, meta-date, meta-version, meta-status -->
+<meta name="opd:size" content="A3L">
+<style>
+@page { size: 420mm 297mm; margin: 0 }
+html, body { margin: 0; background: #fff }
+.canvas { position: relative; width: 420mm; height: 297mm; overflow: hidden; background: #fff; font: 12pt "Zeta Nonexistent Sans", sans-serif; color: #111 }
+.card { position: absolute; left: 20mm; top: 60mm; width: 40mm; height: 8mm; border: 1px solid #333; padding: 2mm; overflow: visible }
+.clip { position: absolute; left: 70mm; top: 60mm; width: 40mm; height: 8mm; border: 1px solid #333; overflow: hidden; padding: 1mm }
+.tiny { position: absolute; left: 20mm; top: 90mm; font-size: 4pt }
+.faint { position: absolute; left: 20mm; top: 100mm; color: #c8c8c8; font-size: 14pt }
+.prose { position: absolute; left: 20mm; top: 115mm; width: 160mm; font-size: 11pt }
+.a { position: absolute; left: 200mm; top: 60mm; font-size: 18pt } .b { position: absolute; left: 204mm; top: 63mm; font-size: 18pt }
+h1 { position: absolute; left: 20mm; top: 15mm; margin: 0; font-size: 14pt }
+</style></head>
+<body><main class="canvas" data-canvas data-size="A3L">
+  <h1 data-title>Fixture: everything wrong on purpose</h1>
+  <div class="card">This label is far too long for its little box and spills out of it</div>
+  <div class="clip">Clipped text that is hidden by overflow hidden on this box</div>
+  <div class="tiny">Tiny 4pt text nobody can read on a printed wall page</div>
+  <div class="faint">Light grey text on white fails contrast</div>
+  <p class="prose">This paragraph is posterized prose: it explains the process in complete sentences instead of using a diagram, labels, numbers, and short annotations, which is exactly what a one page visual design must not do because nobody reads walls of text on a wall page.</p>
+  <div class="a">Overlapping A</div><div class="b">Overlapping B</div>
+  <img src="does-not-exist.png" alt="broken" style="position:absolute;left:250mm;top:100mm;width:60mm;height:40mm">
+  <svg viewBox="0 0 392 236" style="position:absolute;left:14mm;top:150mm;width:392mm;height:130mm">
+    <defs><marker id="ar" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="4" markerHeight="4" orient="auto"><path d="M0 0L10 5L0 10z" fill="context-stroke"/></marker></defs>
+    <g class="node" data-node transform="translate(10 20)"><rect width="40" height="14" fill="#dde" stroke="#336" stroke-width=".5"/><text x="20" y="8" text-anchor="middle" style="font-size:3.5px">A node label that is much too wide</text></g>
+    <g class="node" data-node transform="translate(120 20)"><rect width="40" height="14" fill="#dde" stroke="#336" stroke-width=".5"/><text x="20" y="8" text-anchor="middle" style="font-size:3.5px">Fits</text></g>
+    <path data-edge d="M50 27 H120" stroke="#333" stroke-width=".5" fill="none" marker-end="url(#ar)"/>
+    <path data-edge d="M160 27 H230" stroke="#333" stroke-width=".5" fill="none" marker-end="url(#ar)"/>
+    <path data-edge d="M140 5 V50" stroke="#333" stroke-width=".5" fill="none"/>
+    <text x="80" y="27.5" text-anchor="middle" style="font-size:3.5px">label crossed by line</text>
+  </svg>
+</main></body></html>

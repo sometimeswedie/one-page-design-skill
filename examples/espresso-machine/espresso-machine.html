@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Inside an espresso machine: cold water to one shot</title>
+<!-- PAGE SIZE: change ALL FOUR together: this meta, data-size on <main>, --page-w/--page-h/--s/--k, and @page size.
+     Landscape (w x h mm): A4 297x210 s=.707 k=1.25 | A3 420x297 s=1 k=1 | A2 594x420 s=1.414 k=1 | A1 841x594 s=2 k=1.
+     Portrait: swap w and h and add P (A3P), new_page.py also sets the SVG viewBox to 269 x 338.
+     Design everything in "A3 millimetres": SVG user unit = 1 mm at A3, so SVG scales with the paper; HTML sizes use var(--s).
+     --k boosts TYPE ONLY on small paper (A4) so labels stay >= 7pt. --title-pt is the title size at A3 (shrink it for long titles or narrow sheets;
+     the title must stay on at most 2 lines inside the 28 mm masthead). Never use vh/vw. -->
+<meta name="opd:size" content="A3L">
+
+<!-- BRAND: link the project's tokens, then add the bridge block at the end of <style>. See references/brand-and-tokens.md
+     (scripts/new_page.py --brand-css PATH does the link). -->
+<!-- <link rel="stylesheet" href="../brand/tokens.css"> -->
+<style>
+@page { size: 420mm 297mm; margin: 0 }
+:root {
+  --page-w: 420mm; --page-h: 297mm; --s: 1; --k: 1; --ts: calc(var(--s) * var(--k)); --title-pt: 30pt;
+
+  /* brand bridge: map the project's tokens onto these names, e.g. --paper: var(--rb-bg, #fbfaf7). Neutral fallbacks otherwise. */
+  --paper: #fbfaf7;  --panel: #f1efe9;  --ink: #15171a;  --ink-2: #3d434a;  --ink-3: #5b626b;  --line: #c9c5bb;
+  --accent: #0b5cad; --on-accent: #ffffff;
+  --font-display: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-body: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-mono: Menlo, "SF Mono", Consolas, monospace;
+
+  /* categorical colours: colour-blind-safe (Okabe-Ito based). Use for CATEGORY/OWNER only; always pair with a label or shape. */
+  --c1: #0072b2; --c2: #d55e00; --c3: #007a5a; --c4: #8a4f9e; --c5: #a67a00; --c6: #3f6f8f;
+  --tint: 14%;           /* node fill = category colour mixed into paper */
+  color-scheme: light;
+}
+:root[data-theme="dark"] {
+  --paper: #12161a; --panel: #1b2127; --ink: #eef0f2; --ink-2: #c3c8ce; --ink-3: #9aa2ab; --line: #3a434c;
+  --accent: #6db3ff; --on-accent: #08121c;
+  --c1: #56b4e9; --c2: #ff9e5e; --c3: #3ccf9f; --c4: #d69cf0; --c5: #e8c25a; --c6: #8fb7d4;
+  --tint: 22%;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; background: var(--paper); -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+body { font: 400 calc(var(--ts) * 9pt)/1.3 var(--font-body); color: var(--ink); }
+
+/* Fixed masthead and footer rows make the stage a known size: A3 landscape stage = 392 x 215 mm (A3 portrait 269 x 338), so the SVG
+   viewBox below matches it exactly and renders at scale 1. If you change these rows, change the viewBox (the lint reports `svg-scale`). */
+.canvas { position: relative; width: var(--page-w); height: var(--page-h); overflow: hidden; background: var(--paper);
+  display: grid; grid-template-rows: calc(var(--s) * 28mm) 1fr calc(var(--s) * 16mm); gap: calc(var(--s) * 5mm); padding: calc(var(--s) * 14mm); }
+
+/* masthead: title answers "why does this page exist"; metadata makes a printed copy datable */
+.masthead { display: flex; gap: calc(var(--s) * 8mm); align-items: flex-end; padding-bottom: calc(var(--s) * 4mm); border-bottom: 1px solid var(--line); }
+.logo { height: calc(var(--s) * 12mm); display: block; flex: none; }
+.titleblock { flex: 1; min-width: 0; }
+h1 { margin: 0; font: 700 calc(var(--ts) * var(--title-pt))/1.05 var(--font-display); letter-spacing: -0.01em; }
+.purpose { margin: calc(var(--s) * 2mm) 0 0; font: 400 calc(var(--ts) * 12pt)/1.3 var(--font-body); color: var(--ink-2); max-width: calc(var(--s) * 230mm); }
+.meta { margin: 0 0 0 auto; flex: none; display: grid; grid-template-columns: repeat(3, auto); gap: calc(var(--s) * 6mm); font: 400 calc(var(--ts) * 8pt)/1.2 var(--font-mono); color: var(--ink-3); }
+.meta dt { text-transform: uppercase; letter-spacing: .08em; } .meta dd { margin: 0; color: var(--ink); font-weight: 600; }
+
+.stage { min-height: 0; } .stage > svg { width: 100%; height: 100%; display: block; }
+
+.foot { display: grid; grid-template-columns: 1fr auto; gap: calc(var(--s) * 8mm); padding-top: calc(var(--s) * 3mm); border-top: 1px solid var(--line); font: 400 calc(var(--ts) * 8pt)/1.35 var(--font-body); color: var(--ink-3); }
+.foot b { color: var(--ink-2); }
+
+/* ---- SVG vocabulary (units = A3 mm) ---- */
+svg text { font-family: var(--font-body); fill: var(--ink); }
+.t1 { font: 700 calc(6.4px * var(--k)) var(--font-display); }                 /* tier 1: stage / section heads  (~18pt at A3) */
+.t2 { font: 600 calc(3.9px * var(--k)) var(--font-body); }                    /* tier 2: node labels             (~11pt) */
+.t3 { font: 400 calc(3.0px * var(--k)) var(--font-body); fill: var(--ink-2); }/* tier 3: annotations, units, sources (~8.5pt; do not go smaller) */
+.num { font: 700 calc(12px * var(--k)) var(--font-display); }                 /* big figures that carry the story */
+.halo { paint-order: stroke; stroke: var(--paper); stroke-width: 1.4px; stroke-linejoin: round; }
+
+.node rect, .node path, .node circle, .node polygon { stroke-width: .5px; fill: color-mix(in srgb, var(--cat, var(--c1)) var(--tint), var(--paper)); stroke: var(--cat, var(--c1)); }
+.c1 { --cat: var(--c1); } .c2 { --cat: var(--c2); } .c3 { --cat: var(--c3); } .c4 { --cat: var(--c4); } .c5 { --cat: var(--c5); } .c6 { --cat: var(--c6); }
+/* evidence status = outline style: solid decided/specified/observed, dashed proposed/assumed, dotted open */
+.ev-proposed rect, .ev-proposed path { stroke-dasharray: 2.4 1.4; }
+.ev-open rect, .ev-open path { stroke-dasharray: .6 1.2; fill: none; }
+
+.edge { fill: none; stroke: var(--ink-2); stroke-width: .55px; stroke-linejoin: round; stroke-linecap: round; marker-end: url(#arrow); }
+.edge.loop { stroke: var(--accent); stroke-dasharray: 3 1.6; }
+.rule { stroke: var(--line); stroke-width: .3px; }
+
+@media print { .canvas { box-shadow: none; } }
+</style>
+<script>
+/* theme: ?theme=light|dark wins, else the OS setting. render.py sets both. Never leave the theme implicit in a render. */
+(function () {
+  var q = new URLSearchParams(location.search).get('theme');
+  document.documentElement.setAttribute('data-theme', q || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'));
+})();
+</script>
+</head>
+<body>
+<main class="canvas" data-canvas data-size="A3L">
+
+  <header class="masthead">
+    <!-- <img class="logo" src="../brand/logo.svg" alt="Brand"> -->
+    <div class="titleblock">
+      <h1 data-title>Inside an espresso machine: cold water to one shot</h1>
+      <p class="purpose">Shows how six parts turn cold water into a shot, in the order the water meets them.</p>
+    </div>
+    <dl class="meta" data-meta>
+      <div><dt>Status</dt><dd>exploration</dd></div>
+      <div><dt>Version</dt><dd>v1.0</dd></div>
+      <div><dt>Date</dt><dd>2026-10-29</dd></div>
+    </dl>
+  </header>
+
+  <section class="stage">
+    <!-- viewBox = the stage in A3 mm: 392 x 215 at landscape, 269 x 338 at portrait (new_page.py sets it). Everything inside scales with the paper. -->
+    <svg viewBox="0 0 392 215" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Inside an espresso machine: cold water to one shot">
+      <defs>
+        <marker id="arrow" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="4.2" markerHeight="4.2" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="context-stroke"/></marker>
+      </defs>
+      <!-- diagram: built from the R6 anatomy recipe, sample words replaced -->
+<rect data-anchor x="128" y="6" width="136" height="166" rx="4" fill="var(--panel)" stroke="var(--line)" stroke-width=".4"/>
+<rect x="138" y="14" width="116" height="136" rx="6" fill="var(--paper)" stroke="var(--ink-3)" stroke-width=".8"/>
+<rect x="144" y="20" width="36" height="52" rx="2" fill="color-mix(in srgb, var(--c1) 10%, var(--paper))" stroke="var(--c1)" stroke-width=".7"/>
+<rect x="144" y="34" width="36" height="38" rx="2" fill="color-mix(in srgb, var(--c1) 32%, var(--paper))" stroke="var(--c1)" stroke-width=".7"/>
+<circle cx="162" cy="98" r="10" fill="color-mix(in srgb, var(--c1) 24%, var(--paper))" stroke="var(--c1)" stroke-width=".7"/><path d="M162 91 V105 M155 98 H169" stroke="var(--c1)" stroke-width=".7"/>
+<rect x="196" y="48" width="52" height="28" rx="12" fill="color-mix(in srgb, var(--c2) 26%, var(--paper))" stroke="var(--c2)" stroke-width=".8"/>
+<path d="M204 62 l4 -6 l4 12 l4 -12 l4 12 l4 -12 l4 12 l4 -6" fill="none" stroke="var(--c2)" stroke-width=".8" stroke-linejoin="round"/>
+<rect x="206" y="96" width="32" height="16" rx="2" fill="color-mix(in srgb, var(--c3) 26%, var(--paper))" stroke="var(--c3)" stroke-width=".8"/>
+<path d="M208 112 H236 L232 124 H212 Z" fill="color-mix(in srgb, var(--c3) 40%, var(--paper))" stroke="var(--c3)" stroke-width=".8"/>
+<rect x="236" y="116" width="24" height="5" rx="2" fill="color-mix(in srgb, var(--c3) 40%, var(--paper))" stroke="var(--c3)" stroke-width=".8"/>
+<path d="M212 134 H232 L230 148 H214 Z" fill="color-mix(in srgb, var(--c5) 20%, var(--paper))" stroke="var(--c5)" stroke-width=".8"/>
+<rect x="134" y="150" width="124" height="9" rx="2" fill="color-mix(in srgb, var(--c5) 30%, var(--paper))" stroke="var(--c5)" stroke-width=".8"/>
+<path d="M142 154.5 H250" stroke="var(--c5)" stroke-width=".5" stroke-dasharray="2 1.6"/>
+<path class="edge" data-edge-free style="stroke:var(--accent);stroke-width:1px" d="M162 72 V88"/>
+<path class="edge" data-edge-free style="stroke:var(--accent);stroke-width:1px" d="M172 98 H184 V62 H196"/>
+<path class="edge" data-edge-free style="stroke:var(--accent);stroke-width:1px" d="M222 76 V96"/>
+<path class="edge" data-edge-free style="stroke:var(--accent);stroke-width:1px" d="M222 124 V134"/>
+<g class="node c1" data-node transform="translate(0 8)"><rect width="112" height="30" rx="2.4"/><circle cx="8" cy="9" r="4" fill="var(--paper)" stroke="var(--cat)" stroke-width=".5"/><text class="t3" x="8" y="10.2" text-anchor="middle" style="font-weight:700">1</text><text class="t2" x="16" y="10">Water tank</text><text class="t3" x="16" y="17">stores the cold water</text><text class="t3" x="16" y="24.4" style="font-weight:700">about 2 L, refilled by hand</text></g>
+<path class="edge" data-edge-free style="marker-end:none;stroke-width:.35px" d="M112 23 H120 L162 46"/><circle cx="162" cy="46" r="1.3" fill="var(--ink-2)"/>
+<g class="node c1" data-node transform="translate(0 60)"><rect width="112" height="30" rx="2.4"/><circle cx="8" cy="9" r="4" fill="var(--paper)" stroke="var(--cat)" stroke-width=".5"/><text class="t3" x="8" y="10.2" text-anchor="middle" style="font-weight:700">2</text><text class="t2" x="16" y="10">Pump</text><text class="t3" x="16" y="17">pushes water through the machine</text><text class="t3" x="16" y="24.4" style="font-weight:700">about 9 bar of pressure</text></g>
+<path class="edge" data-edge-free style="marker-end:none;stroke-width:.35px" d="M112 75 H120 L152 98"/><circle cx="152" cy="98" r="1.3" fill="var(--ink-2)"/>
+<g class="node c2" data-node transform="translate(280 8)"><rect width="112" height="30" rx="2.4"/><circle cx="8" cy="9" r="4" fill="var(--paper)" stroke="var(--cat)" stroke-width=".5"/><text class="t3" x="8" y="10.2" text-anchor="middle" style="font-weight:700">3</text><text class="t2" x="16" y="10">Boiler</text><text class="t3" x="16" y="17">heats the water</text><text class="t3" x="16" y="24.4" style="font-weight:700">about 93 °C at the coffee</text></g>
+<path class="edge" data-edge-free style="marker-end:none;stroke-width:.35px" d="M280 23 H272 L236 56"/><circle cx="236" cy="56" r="1.3" fill="var(--ink-2)"/>
+<g class="node c3" data-node transform="translate(280 50)"><rect width="112" height="30" rx="2.4"/><circle cx="8" cy="9" r="4" fill="var(--paper)" stroke="var(--cat)" stroke-width=".5"/><text class="t3" x="8" y="10.2" text-anchor="middle" style="font-weight:700">4</text><text class="t2" x="16" y="10">Group head</text><text class="t3" x="16" y="17">spreads water evenly over the coffee</text><text class="t3" x="16" y="24.4" style="font-weight:700">about 25 to 30 s of flow</text></g>
+<path class="edge" data-edge-free style="marker-end:none;stroke-width:.35px" d="M280 65 H272 L238 104"/><circle cx="238" cy="104" r="1.3" fill="var(--ink-2)"/>
+<g class="node c3" data-node transform="translate(280 92)"><rect width="112" height="30" rx="2.4"/><circle cx="8" cy="9" r="4" fill="var(--paper)" stroke="var(--cat)" stroke-width=".5"/><text class="t3" x="8" y="10.2" text-anchor="middle" style="font-weight:700">5</text><text class="t2" x="16" y="10">Portafilter and puck</text><text class="t3" x="16" y="17">holds 18 g of ground coffee</text><text class="t3" x="16" y="24.4" style="font-weight:700">36 g of espresso comes out</text></g>
+<path class="edge" data-edge-free style="marker-end:none;stroke-width:.35px" d="M280 107 H272 L248 118"/><circle cx="248" cy="118" r="1.3" fill="var(--ink-2)"/>
+<g class="node c5" data-node transform="translate(280 134)"><rect width="112" height="30" rx="2.4"/><circle cx="8" cy="9" r="4" fill="var(--paper)" stroke="var(--cat)" stroke-width=".5"/><text class="t3" x="8" y="10.2" text-anchor="middle" style="font-weight:700">6</text><text class="t2" x="16" y="10">Cup and drip tray</text><text class="t3" x="16" y="17">catches the shot and the spills</text><text class="t3" x="16" y="24.4" style="font-weight:700">cup under the spout</text></g>
+<path class="edge" data-edge-free style="marker-end:none;stroke-width:.35px" d="M280 149 H272 L232 141"/><circle cx="232" cy="141" r="1.3" fill="var(--ink-2)"/>
+<text class="t3" x="0" y="112" style="font-weight:700">ONE SHOT, IN NUMBERS</text>
+<text class="num" x="0" y="131">18 g in, 36 g out</text>
+<text class="t2" x="0" y="141">in about 25 to 30 seconds</text>
+<text class="t3" x="0" y="148">a common starting recipe, tune it to taste</text>
+<g class="legend" transform="translate(0 190)"><text class="t3" x="0" y="4.5" style="font-weight:700">LEGEND</text><g class="node c1" transform="translate(20 0)"><rect width="9" height="5" rx="1"/></g><text class="t3" x="32" y="4.2">holds and moves water</text><g class="node c2" transform="translate(88 0)"><rect width="9" height="5" rx="1"/></g><text class="t3" x="100" y="4.2">heats</text><g class="node c3" transform="translate(120 0)"><rect width="9" height="5" rx="1"/></g><text class="t3" x="132" y="4.2">brews</text><g class="node c5" transform="translate(160 0)"><rect width="9" height="5" rx="1"/></g><text class="t3" x="172" y="4.2">catches</text><path class="edge" data-edge-free style="stroke:var(--accent);stroke-width:1px" d="M208 2.5 H222"/><text class="t3" x="225" y="4.2">path of the water, in order 1 to 6</text></g>
+    </svg>
+  </section>
+
+  <footer class="foot">
+    <div><b>Specified:</b> 9 bar, about 93 °C and an 18 g to 36 g shot in 25 to 30 s are common café starting values, not measurements of one machine. <b>Open:</b> real machines differ (heat exchanger, dual boiler).</div>
+    <div>Example page for the one-page-visual-design skill</div>
+  </footer>
+
+</main>
+</body>
+</html>

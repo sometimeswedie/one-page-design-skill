@@ -1,0 +1,32 @@
+<!-- recipe R4-supply-chain: supply chain tiers: make vs buy, exposure. Inner markup for the template's stage <svg viewBox="0 0 392 215"> (A3 mm). Sample words are placeholders. See references/layout-recipes.md -->
+<text class="t3" x="8" y="8" style="font-weight:700">RAW MATERIAL</text>
+<text class="t3" x="110" y="8" style="font-weight:700">COMPONENTS</text>
+<text class="t3" x="212" y="8" style="font-weight:700">SUB-ASSEMBLIES</text>
+<text class="t3" x="314" y="8" style="font-weight:700">PRODUCT</text>
+<g class="node c2" data-node id="rm1" transform="translate(8 20)"><rect width="70" height="20" rx="2.4"/><text class="t2" x="35" y="9.2" text-anchor="middle">Aluminium plate</text><text class="t3" x="35" y="13.6" text-anchor="middle">import</text></g>
+<g class="node c2" data-node id="rm2" transform="translate(8 52)"><rect width="70" height="20" rx="2.4"/><text class="t2" x="35" y="9.2" text-anchor="middle">Carbon sheet</text><text class="t3" x="35" y="13.6" text-anchor="middle">import</text></g>
+<g class="node c2" data-node id="rm3" transform="translate(8 148)"><rect width="70" height="20" rx="2.4"/><text class="t2" x="35" y="9.2" text-anchor="middle">Li-ion cells</text><text class="t3" x="35" y="13.6" text-anchor="middle">import</text></g>
+<g class="node c1" data-node id="cp1" transform="translate(110 20)"><rect width="70" height="20" rx="2.4"/><text class="t2" x="35" y="9.2" text-anchor="middle">Machined frame</text><text class="t3" x="35" y="13.6" text-anchor="middle">make</text></g>
+<g class="node c1" data-node id="cp2" transform="translate(110 52)"><rect width="70" height="20" rx="2.4"/><text class="t2" x="35" y="9.2" text-anchor="middle">Composite skin</text><text class="t3" x="35" y="13.6" text-anchor="middle">make</text></g>
+<g class="node c3" data-node id="cp3" transform="translate(110 84)"><rect width="70" height="20" rx="2.4"/><text class="t2" x="35" y="9.2" text-anchor="middle">Foam core</text><text class="t3" x="35" y="13.6" text-anchor="middle">domestic</text></g>
+<g class="node c2" data-node id="cp4" transform="translate(110 116)"><rect width="70" height="20" rx="2.4"/><text class="t2" x="35" y="9.2" text-anchor="middle">Motors</text><text class="t3" x="35" y="13.6" text-anchor="middle">import</text></g>
+<g class="node c1" data-node id="cp5" transform="translate(110 148)"><rect width="70" height="20" rx="2.4"/><text class="t2" x="35" y="9.2" text-anchor="middle">Battery pack</text><text class="t3" x="35" y="13.6" text-anchor="middle">make</text></g>
+<g class="node c2" data-node id="cp6" transform="translate(110 180)"><rect width="70" height="20" rx="2.4"/><text class="t2" x="35" y="9.2" text-anchor="middle">Flight computer</text><text class="t3" x="35" y="13.6" text-anchor="middle">import</text></g>
+<g class="node c1" data-node id="sa1" transform="translate(212 52)"><rect width="70" height="20" rx="2.4"/><text class="t2" x="35" y="9.2" text-anchor="middle">Airframe</text><text class="t3" x="35" y="13.6" text-anchor="middle">make</text></g>
+<g class="node c1" data-node id="sa2" transform="translate(212 132)"><rect width="70" height="20" rx="2.4"/><text class="t2" x="35" y="9.2" text-anchor="middle">Propulsion pack</text><text class="t3" x="35" y="13.6" text-anchor="middle">make</text></g>
+<g class="node c1" data-node id="sa3" transform="translate(212 180)"><rect width="70" height="20" rx="2.4"/><text class="t2" x="35" y="9.2" text-anchor="middle">Avionics stack</text><text class="t3" x="35" y="13.6" text-anchor="middle">make</text></g>
+<g class="node c1" data-node id="pd" transform="translate(314 96)"><rect width="70" height="28" rx="2.4"/><text class="t2" x="35" y="13.2" text-anchor="middle">Finished aircraft</text><text class="t3" x="35" y="17.6" text-anchor="middle">make</text></g>
+<path class="edge" data-edge style="stroke-width:1.6px;marker-end:none;stroke:var(--ink-2);opacity:.72" d="M78 30 C94 30 94 30 110 30"/>
+<path class="edge" data-edge style="stroke-width:0.8px;marker-end:none;stroke:var(--ink-2);opacity:.72" d="M78 62 C94 62 94 62 110 62"/>
+<path class="edge" data-edge style="stroke-width:1.2px;marker-end:none;stroke:var(--ink-2);opacity:.72" d="M78 158 C94 158 94 158 110 158"/>
+<path class="edge" data-edge style="stroke-width:1.6px;marker-end:none;stroke:var(--ink-2);opacity:.72" d="M180 30 C196 30 196 62 212 62"/>
+<path class="edge" data-edge style="stroke-width:0.8px;marker-end:none;stroke:var(--ink-2);opacity:.72" d="M180 62 C196 62 196 62 212 62"/>
+<path class="edge" data-edge style="stroke-width:0.48px;marker-end:none;stroke:var(--ink-2);opacity:.72" d="M180 94 C196 94 196 62 212 62"/>
+<path class="edge" data-edge style="stroke-width:1.6px;marker-end:none;stroke:var(--ink-2);opacity:.72" d="M180 126 C196 126 196 142 212 142"/>
+<path class="edge" data-edge style="stroke-width:1.2px;marker-end:none;stroke:var(--ink-2);opacity:.72" d="M180 158 C196 158 196 142 212 142"/>
+<path class="edge" data-edge style="stroke-width:1.2px;marker-end:none;stroke:var(--ink-2);opacity:.72" d="M180 190 C196 190 196 190 212 190"/>
+<path class="edge" data-edge style="stroke-width:2px;marker-end:none;stroke:var(--ink-2);opacity:.72" d="M282 62 C298 62 298 110 314 110"/>
+<path class="edge" data-edge style="stroke-width:1.6px;marker-end:none;stroke:var(--ink-2);opacity:.72" d="M282 142 C298 142 298 110 314 110"/>
+<path class="edge" data-edge style="stroke-width:1.2px;marker-end:none;stroke:var(--ink-2);opacity:.72" d="M282 190 C298 190 298 110 314 110"/>
+<g transform="translate(177 183)"><circle r="3.2" fill="var(--paper)" stroke="var(--c2)" stroke-width=".8"/><text class="t3" y="1.1" text-anchor="middle" style="fill:var(--ink);font-weight:700;font-size:3.1px">!</text></g>
+<g class="legend" transform="translate(0 208)"><text class="t3" y="0" style="font-weight:700">LEGEND</text><g class="node c1" transform="translate(20 -4)"><rect width="9" height="5" rx="1"/></g><text class="t3" x="32" y="0">made in-house</text><g class="node c3" transform="translate(70 -4)"><rect width="9" height="5" rx="1"/></g><text class="t3" x="82" y="0">bought, domestic</text><g class="node c2" transform="translate(126 -4)"><rect width="9" height="5" rx="1"/></g><text class="t3" x="138" y="0">bought, imported</text><circle cx="190" cy="-1.6" r="2.6" fill="var(--paper)" stroke="var(--c2)" stroke-width=".7"/><text class="t3" x="195" y="0">single source</text><text class="t3" x="232" y="0">line width = share of unit cost; every node sits in the tier where it is consumed</text></g>

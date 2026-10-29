@@ -1,0 +1,19 @@
+<!-- recipe R2-cycle: closed cycle (racetrack). Inner markup for the template's stage <svg viewBox="0 0 392 215"> (A3 mm). Sample words are placeholders. See references/layout-recipes.md -->
+<path d="M106 33 H286 A60 60 0 0 1 346 93 V123 A60 60 0 0 1 286 183 H106 A60 60 0 0 1 46 123 V93 A60 60 0 0 1 106 33Z" fill="none" stroke="var(--line)" stroke-width="9" stroke-linejoin="round" opacity=".55"/>
+<g class="node c1" data-node id="n1" transform="translate(110 25)"><rect width="40" height="16" rx="2.4"/><text class="t2" x="20" y="8" text-anchor="middle">Design</text></g>
+<g class="node c3" data-node id="n2" transform="translate(176 25)"><rect width="40" height="16" rx="2.4"/><text class="t2" x="20" y="8" text-anchor="middle">Source</text></g>
+<g class="node c2" data-node id="n3" transform="translate(242 25)"><rect width="40" height="16" rx="2.4"/><text class="t2" x="20" y="8" text-anchor="middle">Machine</text></g>
+<g class="node c2" data-node id="n4" transform="translate(326 100)"><rect width="40" height="16" rx="2.4"/><text class="t2" x="20" y="8" text-anchor="middle">Assemble</text></g>
+<g class="node c4" data-node id="n5" transform="translate(242 175)"><rect width="40" height="16" rx="2.4"/><text class="t2" x="20" y="8" text-anchor="middle">Test</text></g>
+<g class="node c1" data-node id="n6" transform="translate(176 175)"><rect width="40" height="16" rx="2.4"/><text class="t2" x="20" y="8" text-anchor="middle">Ship</text></g>
+<g class="node c1" data-node id="n7" transform="translate(110 175)"><rect width="40" height="16" rx="2.4"/><text class="t2" x="20" y="8" text-anchor="middle">Support</text></g>
+<g class="node c6" data-node id="n8" transform="translate(26 100)"><rect width="40" height="16" rx="2.4"/><text class="t2" x="20" y="8" text-anchor="middle">Field data</text></g>
+<path class="edge" data-edge d="M150 33 H176"/>
+<path class="edge" data-edge d="M216 33 H242"/>
+<path class="edge" data-edge d="M282 33 H286 A60 60 0 0 1 346 93 V100"/>
+<path class="edge" data-edge d="M346 116 V123 A60 60 0 0 1 286 183 H282"/>
+<path class="edge" data-edge d="M242 183 H216"/>
+<path class="edge" data-edge d="M176 183 H150"/>
+<path class="edge" data-edge d="M110 183 H106 A60 60 0 0 1 46 123 V116"/>
+<path class="edge" data-edge d="M46 100 V93 A60 60 0 0 1 106 33 H110"/>
+<text class="num" x="196" y="100" text-anchor="middle">14 days</text><text class="t2" x="196" y="110" text-anchor="middle">order to delivery</text><text class="t3" x="196" y="118" text-anchor="middle">field data changes the next design: the loop closes</text>

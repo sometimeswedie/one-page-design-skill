@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Shipping a release: who does what, and when</title>
+<!-- PAGE SIZE: change ALL FOUR together: this meta, data-size on <main>, --page-w/--page-h/--s/--k, and @page size.
+     Landscape (w x h mm): A4 297x210 s=.707 k=1.25 | A3 420x297 s=1 k=1 | A2 594x420 s=1.414 k=1 | A1 841x594 s=2 k=1.
+     Portrait: swap w and h and add P (A3P), new_page.py also sets the SVG viewBox to 269 x 338.
+     Design everything in "A3 millimetres": SVG user unit = 1 mm at A3, so SVG scales with the paper; HTML sizes use var(--s).
+     --k boosts TYPE ONLY on small paper (A4) so labels stay >= 7pt. --title-pt is the title size at A3 (shrink it for long titles or narrow sheets;
+     the title must stay on at most 2 lines inside the 28 mm masthead). Never use vh/vw. -->
+<meta name="opd:size" content="A3L">
+
+<!-- BRAND: link the project's tokens, then add the bridge block at the end of <style>. See references/brand-and-tokens.md
+     (scripts/new_page.py --brand-css PATH does the link). -->
+<!-- <link rel="stylesheet" href="../brand/tokens.css"> -->
+<style>
+@page { size: 420mm 297mm; margin: 0 }
+:root {
+  --page-w: 420mm; --page-h: 297mm; --s: 1; --k: 1; --ts: calc(var(--s) * var(--k)); --title-pt: 30pt;
+
+  /* brand bridge: map the project's tokens onto these names, e.g. --paper: var(--rb-bg, #fbfaf7). Neutral fallbacks otherwise. */
+  --paper: #fbfaf7;  --panel: #f1efe9;  --ink: #15171a;  --ink-2: #3d434a;  --ink-3: #5b626b;  --line: #c9c5bb;
+  --accent: #0b5cad; --on-accent: #ffffff;
+  --font-display: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-body: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-mono: Menlo, "SF Mono", Consolas, monospace;
+
+  /* categorical colours: colour-blind-safe (Okabe-Ito based). Use for CATEGORY/OWNER only; always pair with a label or shape. */
+  --c1: #0072b2; --c2: #d55e00; --c3: #007a5a; --c4: #8a4f9e; --c5: #a67a00; --c6: #3f6f8f;
+  --tint: 14%;           /* node fill = category colour mixed into paper */
+  color-scheme: light;
+}
+:root[data-theme="dark"] {
+  --paper: #12161a; --panel: #1b2127; --ink: #eef0f2; --ink-2: #c3c8ce; --ink-3: #9aa2ab; --line: #3a434c;
+  --accent: #6db3ff; --on-accent: #08121c;
+  --c1: #56b4e9; --c2: #ff9e5e; --c3: #3ccf9f; --c4: #d69cf0; --c5: #e8c25a; --c6: #8fb7d4;
+  --tint: 22%;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; background: var(--paper); -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+body { font: 400 calc(var(--ts) * 9pt)/1.3 var(--font-body); color: var(--ink); }
+
+/* Fixed masthead and footer rows make the stage a known size: A3 landscape stage = 392 x 215 mm (A3 portrait 269 x 338), so the SVG
+   viewBox below matches it exactly and renders at scale 1. If you change these rows, change the viewBox (the lint reports `svg-scale`). */
+.canvas { position: relative; width: var(--page-w); height: var(--page-h); overflow: hidden; background: var(--paper);
+  display: grid; grid-template-rows: calc(var(--s) * 28mm) 1fr calc(var(--s) * 16mm); gap: calc(var(--s) * 5mm); padding: calc(var(--s) * 14mm); }
+
+/* masthead: title answers "why does this page exist"; metadata makes a printed copy datable */
+.masthead { display: flex; gap: calc(var(--s) * 8mm); align-items: flex-end; padding-bottom: calc(var(--s) * 4mm); border-bottom: 1px solid var(--line); }
+.logo { height: calc(var(--s) * 12mm); display: block; flex: none; }
+.titleblock { flex: 1; min-width: 0; }
+h1 { margin: 0; font: 700 calc(var(--ts) * var(--title-pt))/1.05 var(--font-display); letter-spacing: -0.01em; }
+.purpose { margin: calc(var(--s) * 2mm) 0 0; font: 400 calc(var(--ts) * 12pt)/1.3 var(--font-body); color: var(--ink-2); max-width: calc(var(--s) * 230mm); }
+.meta { margin: 0 0 0 auto; flex: none; display: grid; grid-template-columns: repeat(3, auto); gap: calc(var(--s) * 6mm); font: 400 calc(var(--ts) * 8pt)/1.2 var(--font-mono); color: var(--ink-3); }
+.meta dt { text-transform: uppercase; letter-spacing: .08em; } .meta dd { margin: 0; color: var(--ink); font-weight: 600; }
+
+.stage { min-height: 0; } .stage > svg { width: 100%; height: 100%; display: block; }
+
+.foot { display: grid; grid-template-columns: 1fr auto; gap: calc(var(--s) * 8mm); padding-top: calc(var(--s) * 3mm); border-top: 1px solid var(--line); font: 400 calc(var(--ts) * 8pt)/1.35 var(--font-body); color: var(--ink-3); }
+.foot b { color: var(--ink-2); }
+
+/* ---- SVG vocabulary (units = A3 mm) ---- */
+svg text { font-family: var(--font-body); fill: var(--ink); }
+.t1 { font: 700 calc(6.4px * var(--k)) var(--font-display); }                 /* tier 1: stage / section heads  (~18pt at A3) */
+.t2 { font: 600 calc(3.9px * var(--k)) var(--font-body); }                    /* tier 2: node labels             (~11pt) */
+.t3 { font: 400 calc(3.0px * var(--k)) var(--font-body); fill: var(--ink-2); }/* tier 3: annotations, units, sources (~8.5pt; do not go smaller) */
+.num { font: 700 calc(12px * var(--k)) var(--font-display); }                 /* big figures that carry the story */
+.halo { paint-order: stroke; stroke: var(--paper); stroke-width: 1.4px; stroke-linejoin: round; }
+
+.node rect, .node path, .node circle, .node polygon { stroke-width: .5px; fill: color-mix(in srgb, var(--cat, var(--c1)) var(--tint), var(--paper)); stroke: var(--cat, var(--c1)); }
+.c1 { --cat: var(--c1); } .c2 { --cat: var(--c2); } .c3 { --cat: var(--c3); } .c4 { --cat: var(--c4); } .c5 { --cat: var(--c5); } .c6 { --cat: var(--c6); }
+/* evidence status = outline style: solid decided/specified/observed, dashed proposed/assumed, dotted open */
+.ev-proposed rect, .ev-proposed path { stroke-dasharray: 2.4 1.4; }
+.ev-open rect, .ev-open path { stroke-dasharray: .6 1.2; fill: none; }
+
+.edge { fill: none; stroke: var(--ink-2); stroke-width: .55px; stroke-linejoin: round; stroke-linecap: round; marker-end: url(#arrow); }
+.edge.loop { stroke: var(--accent); stroke-dasharray: 3 1.6; }
+.rule { stroke: var(--line); stroke-width: .3px; }
+
+@media print { .canvas { box-shadow: none; } }
+</style>
+<script>
+/* theme: ?theme=light|dark wins, else the OS setting. render.py sets both. Never leave the theme implicit in a render. */
+(function () {
+  var q = new URLSearchParams(location.search).get('theme');
+  document.documentElement.setAttribute('data-theme', q || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'));
+})();
+</script>
+</head>
+<body>
+<main class="canvas" data-canvas data-size="A3L">
+
+  <header class="masthead">
+    <!-- <img class="logo" src="../brand/logo.svg" alt="Brand"> -->
+    <div class="titleblock">
+      <h1 data-title>Shipping a release: who does what, and when</h1>
+      <p class="purpose">Shows a team the 14-day path from scope freeze to full rollout, the gates and the critical chain.</p>
+    </div>
+    <dl class="meta" data-meta>
+      <div><dt>Status</dt><dd>exploration</dd></div>
+      <div><dt>Version</dt><dd>v1.0</dd></div>
+      <div><dt>Date</dt><dd>2026-10-29</dd></div>
+    </dl>
+  </header>
+
+  <section class="stage">
+    <!-- viewBox = the stage in A3 mm: 392 x 215 at landscape, 269 x 338 at portrait (new_page.py sets it). Everything inside scales with the paper. -->
+    <svg viewBox="0 0 392 215" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Shipping a release: who does what, and when">
+      <defs>
+        <marker id="arrow" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="4.2" markerHeight="4.2" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="context-stroke"/></marker>
+      </defs>
+      <!-- diagram: generated from release-spec.json (R9 time-scaled swimlane) -->
+<text class="t3" x="0" y="6" style="font-weight:700">WORKING DAYS</text>
+<line class="rule" x1="40" x2="40" y1="9" y2="179" stroke-dasharray=".8 1.4"/><text class="t3" x="40" y="6" text-anchor="middle">0</text>
+<line class="rule" x1="63.3333" x2="63.3333" y1="9" y2="179" stroke-dasharray=".8 1.4"/><text class="t3" x="63.3333" y="6" text-anchor="middle">1</text>
+<line class="rule" x1="86.6667" x2="86.6667" y1="9" y2="179" stroke-dasharray=".8 1.4"/><text class="t3" x="86.6667" y="6" text-anchor="middle">2</text>
+<line class="rule" x1="110" x2="110" y1="9" y2="179" stroke-dasharray=".8 1.4"/><text class="t3" x="110" y="6" text-anchor="middle">3</text>
+<line class="rule" x1="133.333" x2="133.333" y1="9" y2="179" stroke-dasharray=".8 1.4"/><text class="t3" x="133.333" y="6" text-anchor="middle">4</text>
+<line class="rule" x1="156.667" x2="156.667" y1="9" y2="179" stroke-dasharray=".8 1.4"/><text class="t3" x="156.667" y="6" text-anchor="middle">5</text>
+<line class="rule" x1="180" x2="180" y1="9" y2="179" stroke-dasharray=".8 1.4"/><text class="t3" x="180" y="6" text-anchor="middle">6</text>
+<line class="rule" x1="203.333" x2="203.333" y1="9" y2="179" stroke-dasharray=".8 1.4"/><text class="t3" x="203.333" y="6" text-anchor="middle">7</text>
+<line class="rule" x1="226.667" x2="226.667" y1="9" y2="179" stroke-dasharray=".8 1.4"/><text class="t3" x="226.667" y="6" text-anchor="middle">8</text>
+<line class="rule" x1="250" x2="250" y1="9" y2="179" stroke-dasharray=".8 1.4"/><text class="t3" x="250" y="6" text-anchor="middle">9</text>
+<line class="rule" x1="273.333" x2="273.333" y1="9" y2="179" stroke-dasharray=".8 1.4"/><text class="t3" x="273.333" y="6" text-anchor="middle">10</text>
+<line class="rule" x1="296.667" x2="296.667" y1="9" y2="179" stroke-dasharray=".8 1.4"/><text class="t3" x="296.667" y="6" text-anchor="middle">11</text>
+<line class="rule" x1="320" x2="320" y1="9" y2="179" stroke-dasharray=".8 1.4"/><text class="t3" x="320" y="6" text-anchor="middle">12</text>
+<line class="rule" x1="343.333" x2="343.333" y1="9" y2="179" stroke-dasharray=".8 1.4"/><text class="t3" x="343.333" y="6" text-anchor="middle">13</text>
+<line class="rule" x1="366.667" x2="366.667" y1="9" y2="179" stroke-dasharray=".8 1.4"/><text class="t3" x="366.667" y="6" text-anchor="middle">14</text>
+<line class="rule" x1="390" x2="390" y1="9" y2="179" stroke-dasharray=".8 1.4"/><text class="t3" x="390" y="6" text-anchor="middle">15</text>
+<rect x="0" y="12" width="392" height="28" rx="2" fill="var(--panel)" opacity=".6"/>
+<text class="t3" x="3" y="18" style="font-weight:700">PRODUCT</text>
+<rect x="0" y="42" width="392" height="28" rx="2" fill="var(--panel)" opacity=".6"/>
+<text class="t3" x="3" y="48" style="font-weight:700">ENGINEERING</text>
+<rect x="0" y="72" width="392" height="28" rx="2" fill="var(--panel)" opacity=".6"/>
+<text class="t3" x="3" y="78" style="font-weight:700">QA</text>
+<rect x="0" y="102" width="392" height="47" rx="2" fill="var(--panel)" opacity=".6"/>
+<text class="t3" x="3" y="108" style="font-weight:700">RELEASE OPS</text>
+<rect x="0" y="151" width="392" height="28" rx="2" fill="var(--panel)" opacity=".6"/>
+<text class="t3" x="3" y="157" style="font-weight:700">SUPPORT</text>
+<line class="rule" x1="180" x2="180" y1="9" y2="181" stroke="var(--ink-3)" stroke-dasharray="1.6 1.2"/>
+<line class="rule" x1="296.667" x2="296.667" y1="9" y2="181" stroke="var(--ink-3)" stroke-dasharray="1.6 1.2"/>
+<line class="rule" x1="366.667" x2="366.667" y1="9" y2="181" stroke="var(--ink-3)" stroke-dasharray="1.6 1.2"/>
+<g class="node c1" data-node id="scope" transform="translate(40 16.5)"><rect width="23.3333" height="16" rx="1.6"/><text class="t2" x="11.6667" y="7.4" text-anchor="middle">Scope</text><text class="t3" x="11.6667" y="12" text-anchor="middle">freeze</text></g>
+<g class="node c1" data-node id="notes" transform="translate(180 16.5)"><rect width="93.3333" height="16" rx="1.6"/><text class="t2" x="46.6667" y="9.4" text-anchor="middle">Release notes</text></g>
+<g class="node c2" data-node id="build" transform="translate(63.3333 46.5)"><rect style="stroke:var(--accent);stroke-width:1.2px" width="116.667" height="16" rx="1.6"/><text class="t2" x="58.3333" y="7.4" text-anchor="middle">Build features</text><text class="t3" x="58.3333" y="12" text-anchor="middle">merge to main</text></g>
+<g class="node c2" data-node id="fix" transform="translate(250 46.5)"><rect style="stroke:var(--accent);stroke-width:1.2px" width="23.3333" height="16" rx="1.6"/><text class="t2" x="11.6667" y="7.4" text-anchor="middle">Fix</text><text class="t3" x="11.6667" y="12" text-anchor="middle">blockers</text></g>
+<g class="node c3" data-node id="stage" transform="translate(180 106.5)"><rect style="stroke:var(--accent);stroke-width:1.2px" width="23.3333" height="16" rx="1.6"/><text class="t2" x="11.6667" y="7.4" text-anchor="middle">Stage</text><text class="t3" x="11.6667" y="12" text-anchor="middle">deploy</text></g>
+<g class="node c3" data-node id="rehearse" transform="translate(203.333 125.5)"><rect width="46.6667" height="16" rx="1.6"/><text class="t2" x="23.3333" y="9.4" text-anchor="middle">Rollback rehearsal</text></g>
+<g class="node c4" data-node id="regr" transform="translate(203.333 76.5)"><rect style="stroke:var(--accent);stroke-width:1.2px" width="46.6667" height="16" rx="1.6"/><text class="t2" x="23.3333" y="7.4" text-anchor="middle">Regression</text><text class="t3" x="23.3333" y="12" text-anchor="middle">full suite</text></g>
+<g class="node c4" data-node id="retest" transform="translate(273.333 76.5)"><rect style="stroke:var(--accent);stroke-width:1.2px" width="23.3333" height="16" rx="1.6"/><text class="t2" x="11.6667" y="9.4" text-anchor="middle">Retest</text></g>
+<g class="node c3" data-node id="roll" transform="translate(296.667 106.5)"><rect style="stroke:var(--accent);stroke-width:1.2px" width="46.6667" height="16" rx="1.6"/><text class="t2" x="23.3333" y="7.4" text-anchor="middle">Staged rollout</text><text class="t3" x="23.3333" y="12" text-anchor="middle">10% then 100%</text></g>
+<g class="node c5" data-node id="brief" transform="translate(250 155.5)"><rect width="46.6667" height="16" rx="1.6"/><text class="t2" x="23.3333" y="9.4" text-anchor="middle">Support briefing</text></g>
+<g class="node c5" data-node id="watch" transform="translate(343.333 155.5)"><rect style="stroke:var(--accent);stroke-width:1.2px" width="23.3333" height="16" rx="1.6"/><text class="t2" x="11.6667" y="7.4" text-anchor="middle">Watch</text><text class="t3" x="11.6667" y="12" text-anchor="middle">tickets</text></g>
+<path class="edge" data-edge d="M60.8333 32.5 L60.8333 53.25 Q60.8333 54.5 62.0833 54.5 L63.3333 54.5"/>
+<path class="edge" data-edge d="M177.5 62.5 L177.5 113.25 Q177.5 114.5 178.75 114.5 L180 114.5"/>
+<path class="edge" data-edge d="M200.833 106.5 L200.833 85.75 Q200.833 84.5 202.083 84.5 L203.333 84.5"/>
+<path class="edge" data-edge d="M247.5 76.5 L247.5 55.75 Q247.5 54.5 248.75 54.5 L250 54.5"/>
+<path class="edge" data-edge d="M270.833 62.5 L270.833 83.25 Q270.833 84.5 272.083 84.5 L273.333 84.5"/>
+<path class="edge" data-edge d="M294.167 92.5 L294.167 113.25 Q294.167 114.5 295.417 114.5 L296.667 114.5"/>
+<path class="edge" data-edge d="M340.833 122.5 L340.833 162.25 Q340.833 163.5 342.083 163.5 L343.333 163.5"/>
+<g class="node c1" data-node transform="translate(171 181)"><rect width="18" height="8" rx="1.5"/><text class="t2" x="9" y="5.7" text-anchor="middle">G1</text></g><text class="t3" x="180" y="194" text-anchor="middle">code freeze</text>
+<g class="node c1" data-node transform="translate(287.667 181)"><rect width="18" height="8" rx="1.5"/><text class="t2" x="9" y="5.7" text-anchor="middle">G2</text></g><text class="t3" x="296.667" y="194" text-anchor="middle">go / no-go, prep done</text>
+<g class="node c1" data-node transform="translate(357.667 181)"><rect width="18" height="8" rx="1.5"/><text class="t2" x="9" y="5.7" text-anchor="middle">G3</text></g><text class="t3" x="366.667" y="194" text-anchor="middle">release done</text>
+<!-- exception path, drawn by hand (the generator only draws finish-to-start links): a failed retest sends the work back to Fix -->
+<path class="edge loop" data-edge d="M285 76.5 V57.5 Q285 54.5 282 54.5 H273.333"/>
+<text class="t3" x="288" y="62">retest fails:</text><text class="t3" x="288" y="66">fix again</text>
+<g class="legend"><text class="t3" x="0" y="210" style="font-weight:700">LEGEND</text><text class="t3" x="20" y="210">lane = owner, bar length = days to scale, accent outline = critical path (longest chain), dashed line = rework, G = gate</text></g>
+    </svg>
+  </section>
+
+  <footer class="foot">
+    <div><b>Assumed:</b> all durations describe a two-week cadence, not a measured team. <b>Decided:</b> three gates, G1 code freeze, G2 go / no-go, G3 done. <b>Open:</b> who calls G2?</div>
+    <div>Example page for the one-page-visual-design skill</div>
+  </footer>
+
+</main>
+</body>
+</html>
